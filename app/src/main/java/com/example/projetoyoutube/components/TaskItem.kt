@@ -42,7 +42,7 @@ fun TaskItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp),
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp).clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = Purple80,
         ),

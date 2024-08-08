@@ -1,6 +1,7 @@
 package com.example.projetoyoutube.view
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.example.projetoyoutube.components.AppBar
 import com.example.projetoyoutube.components.TitleAppBar
@@ -31,6 +33,7 @@ import com.example.projetoyoutube.ui.theme.Purple80
 import com.example.projetoyoutube.ui.theme.PurpleGrey90
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projetoyoutube.components.TaskItem
+import com.example.projetoyoutube.model.TaskModel
 import com.example.projetoyoutube.ui.theme.BackgroundScaffold
 import com.example.projetoyoutube.ui.theme.PurpleGrey80
 import com.example.projetoyoutube.viewmodel.TaskViewModel
@@ -40,7 +43,7 @@ import com.example.projetoyoutube.viewmodel.TaskViewModel
 @Composable
 fun HomeTaskView(navHostController: NavHostController, viewModel: TaskViewModel = viewModel()) {
 
-    var showDialog by remember { mutableStateOf(false) }
+    var selectedTask by remember { mutableStateOf<TaskModel?>(null) }
     Scaffold(
         containerColor = BackgroundScaffold,
         topBar = {
@@ -81,28 +84,23 @@ fun HomeTaskView(navHostController: NavHostController, viewModel: TaskViewModel 
                 .padding(it)
         ) {
             items(taskList.value.reversed(), key = { task -> task.id }) {
-                if (showDialog) {
+                if (selectedTask != null && selectedTask == it) {
                     AlertDialog(
-                        onDismissRequest = { showDialog = false },
-                        title = { Text(it.title) },
-                        text = { Text(it.description) },
+                        onDismissRequest = { selectedTask = null },
+                        title = { Text(selectedTask?.title ?: "") },
+                        text = { Text(selectedTask?.description ?: "") },
                         confirmButton = {
-                            TextButton(onClick = { showDialog = false }) {
+                            TextButton(onClick = {selectedTask = null }) {
                                 Text("Fechar")
                             }
                         },
-//                        dismissButton = {
-//                            TextButton(onClick = { showDialog = false }) {
-//                                Text("Cancel")
-//                            }
-//                        }
                     )
                 }
 
                 TaskItem(
                     taskModel = it,
                     onClick = {
-                        showDialog = true
+                        selectedTask = it
                     },
                     onDeleteTask = {
                         viewModel.deleteTask(it)
