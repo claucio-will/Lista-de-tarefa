@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.projetoyoutube.ui.theme.IconRadioGreen
 import com.example.projetoyoutube.ui.theme.PurpleGrey90
 import com.example.projetoyoutube.viewmodel.TaskViewModel
 
@@ -37,7 +38,7 @@ fun RadioButtonGroupHorizontal(viewModel: TaskViewModel) {
                     colors = RadioButtonDefaults.colors(
                         selectedColor = when (option) {
                             1 -> {
-                                Color.Green
+                                IconRadioGreen
                             }
 
                             2 -> {
@@ -50,7 +51,7 @@ fun RadioButtonGroupHorizontal(viewModel: TaskViewModel) {
                         },
                         unselectedColor = when (option) {
                             1 -> {
-                                Color.Green
+                                IconRadioGreen
                             }
 
                            2 -> {
