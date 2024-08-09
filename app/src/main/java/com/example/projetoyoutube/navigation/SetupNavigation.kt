@@ -1,6 +1,13 @@
 package com.example.projetoyoutube.navigation
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +23,15 @@ fun SetupNavigation(
     viewModel: TaskViewModel = viewModel(),
 
     ) {
+    val window = (LocalView.current.context as ComponentActivity).window
+
+    SideEffect {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.statusBarColor = Color.White.toArgb()
+
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = true // Define ícones escuros para fundo claro
+    }
 
 
     NavHost(navController = navHostController, startDestination = Screen.HomeView.route){

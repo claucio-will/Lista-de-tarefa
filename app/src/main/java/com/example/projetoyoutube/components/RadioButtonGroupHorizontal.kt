@@ -17,7 +17,7 @@ import com.example.projetoyoutube.viewmodel.TaskViewModel
 
 @Composable
 fun RadioButtonGroupHorizontal(viewModel: TaskViewModel) {
-    val options = listOf(1, 2, 3)
+    val options = listOf(1, 2)
 //    var priority by remember { mutableStateOf(options[0]) }
 
 
@@ -26,7 +26,7 @@ fun RadioButtonGroupHorizontal(viewModel: TaskViewModel) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(text = "Nivel de prioridade:", color = PurpleGrey90)
+        Text(text = "Status", color = PurpleGrey90)
         options.forEach { option ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -38,11 +38,11 @@ fun RadioButtonGroupHorizontal(viewModel: TaskViewModel) {
                     colors = RadioButtonDefaults.colors(
                         selectedColor = when (option) {
                             1 -> {
-                                IconRadioGreen
+                                Color.Yellow
                             }
 
                             2 -> {
-                                Color.Yellow
+                                IconRadioGreen
                             }
 
                             else -> {

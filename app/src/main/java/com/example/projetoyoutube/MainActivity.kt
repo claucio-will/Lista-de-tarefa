@@ -17,6 +17,7 @@ import com.example.projetoyoutube.ui.theme.ProjetoYoutubeTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             ProjetoYoutubeTheme {

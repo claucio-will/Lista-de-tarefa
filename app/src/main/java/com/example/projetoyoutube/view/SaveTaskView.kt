@@ -86,8 +86,11 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
             Spacer(modifier = Modifier.height(5.dp))
             RadioButtonGroupHorizontal(viewModel)
             ElevatedButton(
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 10.dp
+                ),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Purple80,
+                    containerColor = Color.White,
                     contentColor = PurpleGrey90,
                 ),
                 modifier = Modifier
@@ -99,7 +102,7 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
                             TaskModel(
                                 title = viewModel.title,
                                 description = viewModel.description,
-                                priority = viewModel.priority
+                                status = viewModel.status
                             )
                         )
                         navHostController.navigateUp()

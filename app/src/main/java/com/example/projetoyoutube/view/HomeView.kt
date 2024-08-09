@@ -2,6 +2,7 @@ package com.example.projetoyoutube.view
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
@@ -22,13 +23,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,11 +41,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.toArgb
 
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
 import com.example.projetoyoutube.components.AppBar
 import com.example.projetoyoutube.components.TitleAppBar
@@ -49,6 +60,7 @@ import com.example.projetoyoutube.ui.theme.Purple80
 import com.example.projetoyoutube.ui.theme.PurpleGrey90
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projetoyoutube.components.TaskItem
+import com.example.projetoyoutube.components.TodoItemCard
 import com.example.projetoyoutube.model.TaskModel
 import com.example.projetoyoutube.ui.theme.BackgroundScaffold
 import com.example.projetoyoutube.ui.theme.PurpleGrey80
@@ -61,8 +73,7 @@ import kotlinx.coroutines.delay
 fun HomeTaskView(navHostController: NavHostController, viewModel: TaskViewModel = viewModel()) {
 
     var selectedTask by remember { mutableStateOf<TaskModel?>(null) }
-    var isVisible by remember { mutableStateOf(true) }
-    val scrollState = rememberScrollState()
+
 
     Scaffold(
         containerColor = BackgroundScaffold,
@@ -73,9 +84,12 @@ fun HomeTaskView(navHostController: NavHostController, viewModel: TaskViewModel 
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                containerColor = Purple80,
+                elevation = FloatingActionButtonDefaults.elevation(
+                    defaultElevation = 10.dp
+                ),
+                containerColor = Color.White,
                 contentColor = PurpleGrey90,
-                text = { Text(text = "Criar") },
+                text = { Text(text = "Nova") },
                 icon = {
                     Icon(
                         Icons.Filled.Add,
@@ -97,7 +111,7 @@ fun HomeTaskView(navHostController: NavHostController, viewModel: TaskViewModel 
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = "Lista Vazia", color = Purple80)
+                Text(text = "Lista Vazia", color = PurpleGrey90)
             }
         }
         LazyColumn(
@@ -132,17 +146,17 @@ fun HomeTaskView(navHostController: NavHostController, viewModel: TaskViewModel 
                         },
                     )
                 }
-                TaskItem(
-                    taskModel = it,
+                TodoItemCard(
+                    todoItem = it,
                     onClick = {
                         selectedTask = it
                     },
                     onDeleteTask = {
                         viewModel.deleteTask(it)
                     },
-                    onEditTask = {
-                        viewModel.updateTask(it)
-                    }
+//                    onPriorityChange = { updatedTask ->
+//                        viewModel.updateTaskPriority(updatedTask)
+//                    }
                 )
             }
         }
