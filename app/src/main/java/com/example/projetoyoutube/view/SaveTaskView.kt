@@ -54,9 +54,10 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
             OutlinedTextField(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = Color.Gray,
-                    unfocusedTextColor = Color.Gray
+                    unfocusedTextColor = Color.Gray,
+                    focusedBorderColor = Color.Black,
                 ),
-                label = { Text(text = "Titulo") },
+                label = { Text(text = "Titulo", color = Color.Black) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 13.dp),
@@ -69,9 +70,11 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
             OutlinedTextField(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = Color.Gray,
-                    unfocusedTextColor = Color.Gray
+                    unfocusedTextColor = Color.Gray,
+                    focusedBorderColor = Color.Black,
+
                 ),
-                label = { Text(text = "Descrição") },
+                label = { Text(text = "Descrição", color = Color.Black) },
                 singleLine = false,
                 maxLines = 3,
                 modifier = Modifier
@@ -84,25 +87,26 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
 
                 })
             Spacer(modifier = Modifier.height(5.dp))
-            RadioButtonGroupHorizontal(viewModel)
+            //RadioButtonGroupHorizontal(viewModel)
             ElevatedButton(
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 10.dp
                 ),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = PurpleGrey90,
+                    containerColor = Color.Black,
+                    contentColor = Color.White,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 onClick = {
-                    if (viewModel.title.isNotEmpty() && viewModel.description.isNotEmpty()) {
+                    if (viewModel.title.isNotEmpty() ) {
                         viewModel.addTask(
                             TaskModel(
                                 title = viewModel.title,
                                 description = viewModel.description,
-                                status = viewModel.status
+                                status = viewModel.priority,
+                                date = viewModel.getDateTime()
                             )
                         )
                         navHostController.navigateUp()

@@ -18,7 +18,10 @@ data class TaskModel(
     val description: String = "",
 
     @ColumnInfo(name = "priority")
-    val priority: Int = 1
+    var status: Int = 1,
+
+    @ColumnInfo(name = "date-created")
+    var date: String = ""
 
 
 )

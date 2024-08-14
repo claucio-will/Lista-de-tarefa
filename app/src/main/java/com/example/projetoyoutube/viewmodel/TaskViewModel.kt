@@ -12,6 +12,8 @@ import com.example.projetoyoutube.model.TaskModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TaskViewModel(private val taskRepository: TaskRepository = Graph.taskRepository) :
     ViewModel() {
@@ -22,8 +24,6 @@ class TaskViewModel(private val taskRepository: TaskRepository = Graph.taskRepos
 
 
     private val _tasks = MutableStateFlow<List<TaskModel>>(listOf())
-
-
 
 
     lateinit var getAllTasks: Flow<List<TaskModel>>
@@ -42,15 +42,9 @@ class TaskViewModel(private val taskRepository: TaskRepository = Graph.taskRepos
         description = newDescription
     }
 
-    fun updateTaskPriority(task: TaskModel) {
-        viewModelScope.launch {
-            // Aqui você deve atualizar a tarefa no repositório ou banco de dados
-            // Exemplo:
-            val updatedTasks = _tasks.value.map {
-                if (it.id == task.id) it.copy(priority = task.priority) else it
-            }
-            _tasks.value = updatedTasks
-        }
+     fun getDateTime(): String {
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        return LocalDateTime.now().format(formatter)
     }
 
     fun addTask(task: TaskModel) {
@@ -58,7 +52,8 @@ class TaskViewModel(private val taskRepository: TaskRepository = Graph.taskRepos
             taskRepository.addTask(task)
             title = ""
             description = ""
-            priority = false
+            priority = 1
+
         }
     }
 

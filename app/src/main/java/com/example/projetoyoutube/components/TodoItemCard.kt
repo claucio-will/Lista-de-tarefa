@@ -1,5 +1,6 @@
 package com.example.projetoyoutube.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,20 +47,23 @@ import com.example.projetoyoutube.ui.theme.ProjetoYoutubeTheme
 import com.example.projetoyoutube.ui.theme.PurpleGrey90
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun TodoItemCard(
     todoItem: TaskModel,
     onClick: () -> Unit,
     onDeleteTask: () -> Unit,
-    //onEditTask: () -> Unit
-
+    onStatusChange: () -> Unit
 ) {
 
     var isVisible by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
-    var checkedState by remember { mutableStateOf(true) }
+
+    var isChecked  by remember { mutableStateOf(todoItem.status == 2) } // Estado derivado
+
 
 
 
@@ -90,42 +95,57 @@ fun TodoItemCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Checkbox(
-                    checked = checkedState,
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Color.Black,
+                        uncheckedColor = Color.Gray,
+                        checkmarkColor = Color.White
+                    ),
+                    checked = isChecked ,
                     onCheckedChange = {
-                        checkedState = it
-                        // Alterna entre prioridade alta (1) e baixa (0)
-                        val newPriority = if (it) 1 else 0
-                       // onPriorityChange(todoItem.copy(priority = newPriority))
+                        isChecked = it
+                        todoItem.status = if (isChecked) 2 else 1
+                        onStatusChange()
+
                     }
                 )
+
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-//                        style = TextStyle(
-//                            textDecoration = if (checkedState) TextDecoration.LineThrough else TextDecoration.None
-//                        ),
+                        style = TextStyle(
+                            textDecoration = if (todoItem.status == 2) TextDecoration.LineThrough else TextDecoration.None,
+                            color = if (todoItem.status == 2) Color.Gray else Color.Black
+                        ),
                         text = todoItem.title,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-//                        style = TextStyle(
-//                            textDecoration = if (checkedState) TextDecoration.LineThrough else TextDecoration.None
-//                        ),
+                        style = TextStyle(
+                            textDecoration = if (todoItem.status == 2) TextDecoration.LineThrough else TextDecoration.None,
+                            color = if (todoItem.status == 2) Color.Gray else Color.Black
+                        ),
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
                         text = todoItem.description,
                         color = Color.Gray,
                         fontSize = 14.sp
                     )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = todoItem.date,
+                        color = Color.Gray,
+                        fontSize = 10.sp
+                    )
+
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TodoStatusChip(status = todoItem.priority)
+                    TodoStatusChip(status = todoItem.status)
                     IconButton(onClick = {
                         isVisible = false
                         coroutineScope.launch {
@@ -161,7 +181,7 @@ fun TodoStatusChip(status: Int) {
     }
     val statusText = when (status) {
         1 -> "Pendente"
-        2 -> "Completa"
+        2 -> "Feita"
         else -> {
             "Finalizada"
         }
@@ -179,16 +199,3 @@ fun TodoStatusChip(status: Int) {
     }
 }
 
-enum class TodoStatus {
-    Pending, Completed
-}
-
-@Preview
-@Composable
-private fun Teste() {
-    ProjetoYoutubeTheme {
-        TodoItemCard(todoItem = TaskModel(), onClick = { /*TODO*/ }) {
-
-        }
-    }
-}
