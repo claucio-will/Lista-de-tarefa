@@ -60,12 +60,7 @@ fun TodoItemCard(
 
     var isVisible by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
-
-
     var isChecked  by remember { mutableStateOf(todoItem.status == 2) } // Estado derivado
-
-
-
 
     AnimatedVisibility(
         visible = isVisible,

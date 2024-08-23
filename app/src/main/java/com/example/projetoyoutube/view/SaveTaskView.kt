@@ -9,31 +9,36 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.projetoyoutube.components.AppBar
-import com.example.projetoyoutube.components.RadioButtonGroupHorizontal
-import com.example.projetoyoutube.components.TitleAppBar
 import com.example.projetoyoutube.model.TaskModel
 import com.example.projetoyoutube.ui.theme.BackgroundScaffold
 import com.example.projetoyoutube.ui.theme.ProjetoYoutubeTheme
-import com.example.projetoyoutube.ui.theme.Purple80
-import com.example.projetoyoutube.ui.theme.PurpleGrey90
 import com.example.projetoyoutube.viewmodel.TaskViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel) {
@@ -41,9 +46,32 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
     Scaffold(
         containerColor = BackgroundScaffold,
         topBar = {
-            AppBar(titleAppBar = TitleAppBar.SAVE_TASK, onBackNavClicked = {
-                navHostController.navigateUp()
-            })
+
+            TopAppBar(
+                modifier = Modifier.shadow(8.dp),
+                title = {
+                    Text(
+                        modifier = Modifier.padding(10.dp),
+                        text = "Salvar tarefa",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    titleContentColor = Color.Black
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { navHostController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Voltar",
+                            tint = Color.Black
+                        )
+                    }
+
+                }
+            )
         },
     ) {
         Column(
@@ -73,7 +101,7 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
                     unfocusedTextColor = Color.Gray,
                     focusedBorderColor = Color.Black,
 
-                ),
+                    ),
                 label = { Text(text = "Descrição", color = Color.Black) },
                 singleLine = false,
                 maxLines = 3,
@@ -100,7 +128,7 @@ fun SaveTaskView(navHostController: NavHostController, viewModel: TaskViewModel)
                     .fillMaxWidth()
                     .padding(16.dp),
                 onClick = {
-                    if (viewModel.title.isNotEmpty() ) {
+                    if (viewModel.title.isNotEmpty()) {
                         viewModel.addTask(
                             TaskModel(
                                 title = viewModel.title,

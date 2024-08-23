@@ -11,6 +11,8 @@ import com.example.projetoyoutube.data.TaskRepository
 import com.example.projetoyoutube.model.TaskModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -23,10 +25,17 @@ class TaskViewModel(private val taskRepository: TaskRepository = Graph.taskRepos
     var priority by mutableStateOf(1)
 
 
-    private val _tasks = MutableStateFlow<List<TaskModel>>(listOf())
+   // private val _tasks = MutableStateFlow<List<TaskModel>>(listOf())
 
 
     lateinit var getAllTasks: Flow<List<TaskModel>>
+
+    fun getCompletedTasks(): Flow<List<TaskModel>> {
+        return getAllTasks.map { tasks ->
+            tasks.filter { task -> task.status == 2 }
+        }
+    }
+
 
     init {
         viewModelScope.launch {
